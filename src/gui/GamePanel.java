@@ -15,6 +15,10 @@ public class GamePanel extends Panel {
         object.draw(graphics);
     }
 
+    public void draw(UIObject object) {
+        object.draw(graphics);
+    }
+
 }
 
 

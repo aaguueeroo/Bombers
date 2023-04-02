@@ -1,5 +1,4 @@
-import gui.GamePanel;
-import gui.Panel;
+import gui.*;
 import input_output.KeyHandler;
 import input_output.Keys;
 import objects.*;
@@ -20,31 +19,32 @@ public class Gameplay {
 
     Player player;
     Coin coin;
+    Bomb bomb;
     List<Obstacle> obstacles;
     Teleporter teleporter;
     Statistics statistics;
 
-    int level;
-    int bombs;
-    long startTime;
+    StatsPanel statsPanel;
+    Dialog dialog;
 
     //Constructor
     public Gameplay(Panel panel, KeyHandler keyHandler, StateManager stateManager) {
         this.panel = (GamePanel) panel;
         this.keyHandler = keyHandler;
         this.stateManager = stateManager;
+        teleporter = null;
+        statistics = new Statistics();
     }
 
     //Methods
     public void init() {
-        player = new Player(keyHandler);
-        level = 1;
-        bombs = 0;
+        player = new Player();
         coin = new Coin();
+        bomb = new Bomb();
         initObstacles();
-        statistics = new Statistics();
-
-        startTime = System.currentTimeMillis();
+        initTeleporter();
+        statistics.reset();
+        statsPanel = new StatsPanel(statistics);
         stateManager.setState(GameStates.RUNNING);
     }
 
@@ -87,7 +87,8 @@ public class Gameplay {
             // get user input
             // do something with user input (update)
             panel.clear();
-            draw();
+            drawElements();
+            drawUI();
             panel.redraw();
             System.out.flush();
 
@@ -95,12 +96,21 @@ public class Gameplay {
 
     }
 
-    private void draw() {
+    private void drawUI() {
+        panel.draw(statsPanel);
+
+        if (dialog != null) {
+            panel.draw(dialog);
+        }
+    }
+
+    private void drawElements() {
         panel.draw(player);
         for (Obstacle obstacle : obstacles) {
             panel.draw(obstacle);
         }
         panel.draw(coin);
+        panel.draw(bomb);
         if (teleporter != null) {
             panel.draw(teleporter);
         }
@@ -113,6 +123,7 @@ public class Gameplay {
             teleporter.move(diffSeconds);
         }
         checkCollisions();
+        updateStats();
 
         // update the game state
         // check if the game is over
@@ -124,9 +135,10 @@ public class Gameplay {
         //Crash with obstacles
         for (int i = 0; i < obstacles.size(); i++) {
             if (player.isColliding(obstacles.get(i))) {
-                if (bombs > 0) {
+                if (statistics.getBombsAccumulated() > 0) {
                     obstacles.remove(i);
-                    bombs--;
+                    statistics.reduceBombs();
+                    player.decreaseSpeed();
                 } else
                     gameOver();
             }
@@ -134,25 +146,40 @@ public class Gameplay {
 
         //Get coin
         if (player.isColliding(coin)) {
-            level++;
+            statistics.increaseLevel();
             statistics.increaseScore(coin.getValue());
-//            initTeleporter();
+            statistics.increaseCoinsCollected();
             addObstacles(2);
             initTeleporter();
             coin = new Coin();
+            bomb = new Bomb();
+            player.increaseSpeed();
+        }
+
+        //Get bomb
+        if (player.isColliding(bomb)) {
+            statistics.increaseBombs();
+            bomb = new Bomb();
+            coin = new Coin();
+            initTeleporter();
+            player.increaseSpeed();
         }
 
         //Teleport
         if (teleporter != null) {
             if (player.isColliding(teleporter)) {
+                statistics.increaseLevel();
                 initTeleporter();
                 coin = new Coin();
+                bomb = new Bomb();
 
                 for (int i = 0; i < 5; i++) {
                     obstacles.add(new Obstacle());
                 }
 
+                statistics.increaseTeleports();
                 statistics.increaseScore(10);
+                player.increaseSpeed();
             }
         }
     }
@@ -187,17 +214,27 @@ public class Gameplay {
         stateManager.setState(GameStates.RUNNING);
     }
 
-    private void gameOver() {
-        player.stopMovement();
-        if (teleporter != null)
-            teleporter.stopMovement();
-        stateManager.setState(GameStates.FINISHED);
-    }
-
 //    private void victory(){
 //        player.stopMovement();
 //        stateManager.setState(GameStates.FINISHED);
 //    }
+
+    private void gameOver() {
+        player.stopMovement();
+        if(teleporter != null)
+            teleporter.stopMovement();
+        stateManager.setState(GameStates.FINISHED);
+
+        dialog = new EndDialog("Game Over", statistics.toString());
+    }
+
+    private void updateStats() {
+
+        if(stateManager.gameState == GameStates.RUNNING) {
+            statistics.setCurrentTime(System.currentTimeMillis());
+            statistics.setObstaclesOnScreen(obstacles.size());
+        }
+    }
 
     private void handleUserInput() {
         Keys keyPressed = keyHandler.getKeyPressed();
@@ -217,7 +254,9 @@ public class Gameplay {
 
             if (keyReleased == Keys.SHOOT && stateManager.gameState == GameStates.FINISHED) {
                 keyHandler.resetKeyReleased();
+                dialog = null;
                 init();
+                stateManager.gameState = GameStates.RUNNING;
             }
         }
 

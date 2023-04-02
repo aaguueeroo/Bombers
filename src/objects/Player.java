@@ -9,22 +9,28 @@ public class Player extends GameObject implements Movable {
 
     private static final int SPEED = 500;
 
-    KeyHandler keyHandler;
     Direction directionMovement;
     double radius;
 
-    public Player(KeyHandler keyHandler) {
+    public Player() {
         super();
         size = new Size(50, 50);
         radius = size.x / 2;
         speed = SPEED;
-        this.keyHandler = keyHandler;
         init();
     }
 
     @Override
     public void init() {
         coordinates = new Coordinates(Panel.WIDTH/2 - radius , Panel.HEIGHT / 2 - radius, size.x, size.y);
+    }
+
+    public void increaseSpeed(){
+        speed += 10;
+    }
+
+    public void decreaseSpeed(){
+        speed -= 10;
     }
 
     public void setDirectionMovement(Direction directionMovement) {

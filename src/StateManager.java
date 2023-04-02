@@ -44,11 +44,5 @@ public class StateManager {
         else if (newGameState == GameStates.FINISHED && (gameState == GameStates.RUNNING || gameState == GameStates.PAUSED)) {
             gameState = GameStates.FINISHED;
         }
-
-        System.out.println("Game state changed to: " + gameState);
     }
-
-
-
-
 }
