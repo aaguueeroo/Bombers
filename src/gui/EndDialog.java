@@ -1,5 +1,6 @@
 package gui;
 
+import gui.components.Dialog;
 import objects.Size;
 import objects.Statistics;
 

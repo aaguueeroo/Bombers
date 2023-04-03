@@ -1,10 +1,10 @@
-package objects;
+package objects.game_elements;
 
-import gui.Panel;
+import objects.Size;
 
 import java.awt.*;
 
-public class Obstacle extends GameObject{
+public class Obstacle extends A_GameObject {
 
     public Obstacle(){
         super();

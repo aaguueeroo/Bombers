@@ -1,4 +1,6 @@
-package gui;
+package gui.window;
+
+import gui.components.A_UIObject;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -11,14 +13,14 @@ import java.util.ArrayList;
  * <li>Change the game settings.</li>
  * <li>Exit the game.</li>
  */
-public class HomePanel extends Panel{
+public class HomePanel extends A_Panel {
 
     public HomePanel() {
         super();
         this.setBackground(Color.GREEN);
     }
 
-    public void draw(ArrayList<UIObject> objects) {
+    public void draw(ArrayList<A_UIObject> objects) {
 
     }
 

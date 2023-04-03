@@ -1,7 +1,7 @@
-import gui.Frame;
-import gui.GamePanel;
-import gui.HomePanel;
-import gui.Panel;
+import gui.window.Frame;
+import gui.window.GamePanel;
+import gui.window.HomePanel;
+import gui.window.A_Panel;
 import input_output.KeyHandler;
 
 /**
@@ -13,7 +13,7 @@ public class Game {
     final private KeyHandler keyHandler;
     final private StateManager stateManager;
 
-    private Panel panel;
+    private A_Panel panel;
     private Gameplay gameplay;
 
     public Game() {

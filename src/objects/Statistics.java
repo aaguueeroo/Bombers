@@ -222,9 +222,9 @@ public class Statistics {
 
     @Override
     public String toString() {
-        String str = "";
+        String str;
 
-        str += "Level: " + this.level;
+        str = "Level: " + this.level;
         str += "\nScore: " + this.score;
         str += "\nTime: " + LocalTime.MIDNIGHT.plus(Duration.ofMillis(timeElapsed)).format(DateTimeFormatter.ofPattern("mm:ss"));
         str += "\nMax Score: " + this.maxScore;

@@ -1,14 +1,16 @@
 package gui;
 
+import gui.components.A_UIObject;
+import gui.window.A_Panel;
 import objects.Statistics;
 
 import java.awt.*;
 
-public class StatsPanel extends UIObject{
+public class Scoreboard extends A_UIObject {
 
     Statistics stats;
 
-    public StatsPanel(Statistics stats) {
+    public Scoreboard(Statistics stats) {
         super();
         this.stats = stats;
     }
@@ -19,6 +21,6 @@ public class StatsPanel extends UIObject{
         graphics.drawString("Score: " + stats.getScore(), 10, 50);
         graphics.drawString("Max Score: " + stats.getMaxScore(), 10, 100);
         graphics.drawString("Level: " + stats.getLevel(), 10, 150);
-        graphics.drawString("Bombs: " + stats.getBombsAccumulated(), Panel.WIDTH - 250, 50);
+        graphics.drawString("Bombs: " + stats.getBombsAccumulated(), A_Panel.WIDTH - 250, 50);
     }
 }

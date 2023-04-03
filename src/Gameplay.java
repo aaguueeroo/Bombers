@@ -1,7 +1,11 @@
 import gui.*;
+import gui.components.Dialog;
+import gui.window.GamePanel;
+import gui.window.A_Panel;
 import input_output.KeyHandler;
 import input_output.Keys;
 import objects.*;
+import objects.game_elements.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +28,11 @@ public class Gameplay {
     Teleporter teleporter;
     Statistics statistics;
 
-    StatsPanel statsPanel;
+    Scoreboard scoreboard;
     Dialog dialog;
 
     //Constructor
-    public Gameplay(Panel panel, KeyHandler keyHandler, StateManager stateManager) {
+    public Gameplay(A_Panel panel, KeyHandler keyHandler, StateManager stateManager) {
         this.panel = (GamePanel) panel;
         this.keyHandler = keyHandler;
         this.stateManager = stateManager;
@@ -44,7 +48,7 @@ public class Gameplay {
         initObstacles();
         initTeleporter();
         statistics.reset();
-        statsPanel = new StatsPanel(statistics);
+        scoreboard = new Scoreboard(statistics);
         stateManager.setState(GameStates.RUNNING);
     }
 
@@ -97,7 +101,7 @@ public class Gameplay {
     }
 
     private void drawUI() {
-        panel.draw(statsPanel);
+        panel.draw(scoreboard);
 
         if (dialog != null) {
             panel.draw(dialog);

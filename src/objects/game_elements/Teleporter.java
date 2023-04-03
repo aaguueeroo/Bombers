@@ -1,8 +1,11 @@
-package objects;
+package objects.game_elements;
+
+import objects.Direction;
+import objects.Size;
 
 import java.awt.*;
 
-public class Teleporter extends GameObject implements Movable {
+public class Teleporter extends A_GameObject implements Movable {
 
     private static final int SPEED = 100;
     private static final int SIZE = 70;

@@ -1,8 +1,10 @@
 package gui;
 
+import gui.components.Button;
+import gui.components.Dialog;
 import objects.Size;
 
-public class PauseDialog extends Dialog{
+public class PauseDialog extends Dialog {
     public PauseDialog(String text) {
         super(text);
     }

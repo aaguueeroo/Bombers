@@ -1,9 +1,11 @@
-package objects;
+package objects.game_elements;
+
+import objects.Size;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
-public class Coin extends GameObject {
+public class Coin extends A_GameObject {
 
     int value;
 

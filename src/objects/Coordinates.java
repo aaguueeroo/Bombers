@@ -1,7 +1,6 @@
 package objects;
 
-import gui.Frame;
-import gui.Panel;
+import gui.window.A_Panel;
 
 public class Coordinates {
     public double topLeftCorner_x;
@@ -11,8 +10,8 @@ public class Coordinates {
     public double center_x;
     public double center_y;
 
-    private double radius_X;
-    private double radius_Y;
+    private final double radius_X;
+    private final double radius_Y;
 
     public Coordinates(double x, double y, double objectSize_x, double objectSize_y) {
         topLeftCorner_x = x;
@@ -35,11 +34,11 @@ public class Coordinates {
     public void moveX(double amount){
         topLeftCorner_x += amount;
 
-        if (topLeftCorner_x > Panel.WIDTH) {
+        if (topLeftCorner_x > A_Panel.WIDTH) {
             topLeftCorner_x = 0;
         }
         else if(topLeftCorner_x < 0) {
-            topLeftCorner_x = Panel.WIDTH;
+            topLeftCorner_x = A_Panel.WIDTH;
         }
 
         adjustToTopLeftCorner();
@@ -48,11 +47,11 @@ public class Coordinates {
     public void moveY(double amount){
         topLeftCorner_y += amount;
 
-        if (topLeftCorner_y > Panel.HEIGHT) {
+        if (topLeftCorner_y > A_Panel.HEIGHT) {
             topLeftCorner_y = 0;
         }
         else if(topLeftCorner_y < 0) {
-            topLeftCorner_y = Panel.HEIGHT;
+            topLeftCorner_y = A_Panel.HEIGHT;
         }
 
         adjustToTopLeftCorner();

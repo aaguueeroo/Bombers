@@ -1,4 +1,4 @@
-package gui;
+package gui.window;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +9,7 @@ public class Frame extends JFrame {
     public static final int WIDTH = 1000;
     public static final int HEIGHT = 800;
 
-    private Panel panel;
+    private A_Panel panel;
 
     public Frame(String title) {
         // Set window properties
@@ -26,7 +26,7 @@ public class Frame extends JFrame {
 //        return panel;
 //    }
 
-    public void setPanel(Panel panel) {
+    public void setPanel(A_Panel panel) {
         if (this.panel != null) {
             remove(this.panel);
         }

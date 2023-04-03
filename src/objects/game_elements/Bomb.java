@@ -1,9 +1,11 @@
-package objects;
+package objects.game_elements;
+
+import objects.Size;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
-public class Bomb extends GameObject{
+public class Bomb extends A_GameObject {
 
     public Bomb() {
         super();

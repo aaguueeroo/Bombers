@@ -1,4 +1,4 @@
-package objects;
+package objects.game_elements;
 
 public interface Movable {
 

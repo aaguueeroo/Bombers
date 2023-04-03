@@ -1,4 +1,4 @@
-package gui;
+package gui.window;
 
 import themes.Colors;
 
@@ -6,16 +6,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public abstract class Panel extends JPanel {
+public abstract class A_Panel extends JPanel {
 
-    public static final int WIDTH = Frame.WIDTH;
+    public static final int WIDTH = gui.window.Frame.WIDTH;
     public static final int HEIGHT = Frame.HEIGHT - 28;
 
     //Output objects
     public Graphics graphics;
     final private BufferedImage imageBuffer;
 
-    public Panel() {
+    public A_Panel() {
 
         //Initiate panel variables
         this.setSize(WIDTH, HEIGHT);

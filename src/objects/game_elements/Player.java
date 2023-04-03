@@ -1,11 +1,13 @@
-package objects;
+package objects.game_elements;
 
-import gui.Panel;
-import input_output.KeyHandler;
+import gui.window.A_Panel;
+import objects.Coordinates;
+import objects.Direction;
+import objects.Size;
 
 import java.awt.*;
 
-public class Player extends GameObject implements Movable {
+public class Player extends A_GameObject implements Movable {
 
     private static final int SPEED = 500;
 
@@ -22,7 +24,7 @@ public class Player extends GameObject implements Movable {
 
     @Override
     public void init() {
-        coordinates = new Coordinates(Panel.WIDTH/2 - radius , Panel.HEIGHT / 2 - radius, size.x, size.y);
+        coordinates = new Coordinates(A_Panel.WIDTH/2 - radius , A_Panel.HEIGHT / 2 - radius, size.x, size.y);
     }
 
     public void increaseSpeed(){
@@ -51,21 +53,21 @@ public class Player extends GameObject implements Movable {
         graphics.fillOval((int) coordinates.topLeftCorner_x, (int) coordinates.topLeftCorner_y, (int) size.x, (int) size.y);
 
         //Checks if player is partially off the horizontal side of the screen
-        if (coordinates.topLeftCorner_x > Panel.WIDTH - size.x) {
-            int sizeLeft = (int) (coordinates.bottomRightCorner_x - Panel.WIDTH);
+        if (coordinates.topLeftCorner_x > A_Panel.WIDTH - size.x) {
+            int sizeLeft = (int) (coordinates.bottomRightCorner_x - A_Panel.WIDTH);
             graphics.fillOval((int) -(size.x - sizeLeft), (int) coordinates.topLeftCorner_y, (int) size.x, (int) size.y);
         }
 
         //Checks if player is partially off the vertical side of the screen
-        if(coordinates.topLeftCorner_y > Panel.HEIGHT - size.y){
-            int sizeLeft = (int) (coordinates.bottomRightCorner_y - Panel.HEIGHT);
+        if(coordinates.topLeftCorner_y > A_Panel.HEIGHT - size.y){
+            int sizeLeft = (int) (coordinates.bottomRightCorner_y - A_Panel.HEIGHT);
             graphics.fillOval((int)coordinates.topLeftCorner_x, (int) -(size.y-sizeLeft), (int) size.x, (int) size.y);
         }
 
         //Checks if player is partially off the horizontal and vertical side of the screen
-        if (coordinates.topLeftCorner_x > Panel.WIDTH - size.x && coordinates.topLeftCorner_y > Panel.HEIGHT - size.y) {
-            int sizeLeftX = (int) (coordinates.bottomRightCorner_x - Panel.WIDTH);
-            int sizeLeftY = (int) (coordinates.bottomRightCorner_y - Panel.HEIGHT);
+        if (coordinates.topLeftCorner_x > A_Panel.WIDTH - size.x && coordinates.topLeftCorner_y > A_Panel.HEIGHT - size.y) {
+            int sizeLeftX = (int) (coordinates.bottomRightCorner_x - A_Panel.WIDTH);
+            int sizeLeftY = (int) (coordinates.bottomRightCorner_y - A_Panel.HEIGHT);
             graphics.fillOval((int) -(size.x - sizeLeftX), (int) -(size.y - sizeLeftY), (int) size.x, (int) size.y);
         }
     }

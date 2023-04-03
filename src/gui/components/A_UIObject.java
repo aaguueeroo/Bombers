@@ -1,12 +1,12 @@
-package gui;
+package gui.components;
 
+import gui.window.A_Panel;
 import objects.Coordinates;
 import objects.Size;
-import themes.Colors;
 
 import java.awt.*;
 
-public abstract class UIObject {
+public abstract class A_UIObject {
 
     Coordinates coordinates;
     Size size;
@@ -22,9 +22,9 @@ public abstract class UIObject {
 
 
     /**
-     * Default constructor witht the appearance of dialogs at the bottom of the screen.
+     * Default constructor with the appearance of dialogs at the bottom of the screen.
      */
-    public UIObject() {
+    public A_UIObject() {
 
         this.paddingX = 200;
         this.paddingY = 400;
@@ -34,12 +34,12 @@ public abstract class UIObject {
         this.contentColor = Color.white;
         this.borderRadius = 25;
 
-        double sizeX = Panel.WIDTH - 2 * paddingX;
-        double sizeY = Panel.HEIGHT - 2 * paddingY;
+        double sizeX = A_Panel.WIDTH - 2 * paddingX;
+        double sizeY = A_Panel.HEIGHT - 2 * paddingY;
         this.size = new Size(sizeX, sizeY);
 
         double topLeftCorner_x = paddingX;
-        double topLeftCorner_y = Panel.HEIGHT - sizeY - paddingY;
+        double topLeftCorner_y = A_Panel.HEIGHT - sizeY - paddingY;
         this.coordinates = new Coordinates(topLeftCorner_x,
                 topLeftCorner_y,
                 sizeX,
@@ -51,17 +51,17 @@ public abstract class UIObject {
      * Constructor for creation of GUIObjects that don't
      * use the default appearance.
      */
-    public UIObject(double x,
-                    double y,
-                    int sizeX,
-                    int sizeY,
-                    int paddingX,
-                    int paddingY,
-                    Color borderColor,
-                    int borderSize,
-                    Color backgroundColor,
-                    Color contentColor,
-                    int borderRadius) {
+    public A_UIObject(double x,
+                      double y,
+                      int sizeX,
+                      int sizeY,
+                      int paddingX,
+                      int paddingY,
+                      Color borderColor,
+                      int borderSize,
+                      Color backgroundColor,
+                      Color contentColor,
+                      int borderRadius) {
 
         this.coordinates = new Coordinates(x, y, sizeX, sizeY);
         this.size = new Size(sizeX, sizeY);

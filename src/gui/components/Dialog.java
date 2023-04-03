@@ -1,11 +1,12 @@
-package gui;
+package gui.components;
 
+import gui.window.A_Panel;
 import objects.Coordinates;
 import objects.Size;
 
 import java.awt.*;
 
-public class Dialog extends UIObject {
+public class Dialog extends A_UIObject {
 
     protected String title;
     protected String text;
@@ -13,7 +14,7 @@ public class Dialog extends UIObject {
 
     public Dialog(String title) {
         super();
-        this.text = text;
+        this.title = title;
     }
 
     public Dialog(String title, String text, Size size) {
@@ -22,8 +23,8 @@ public class Dialog extends UIObject {
         this.text = text;
         this.size = size;
 
-        double coordX = (Panel.WIDTH - size.x) / 2;
-        double coordY = (Panel.HEIGHT - size.y) / 2;
+        double coordX = (A_Panel.WIDTH - size.x) / 2;
+        double coordY = (A_Panel.HEIGHT - size.y) / 2;
         this.coordinates = new Coordinates(coordX, coordY, size.x, size.y);
     }
 
@@ -37,9 +38,9 @@ public class Dialog extends UIObject {
                 200);
         drawStringMultiLine(graphics,
                 text,
-                (int) 370,
-                (int) 400,
-                (int) 400);
+                370,
+                400,
+                400);
     }
 
     protected void drawStringMultiLine(Graphics g, String text, int x, int y, int maxWidth) {
