@@ -94,7 +94,7 @@ public class Statistics {
         return this.bombsAccumulated;
     }
 
-    public void increaseBombs() {
+    public void increaseBombsAccumulated() {
         this.bombsAccumulated++;
 
         if (this.bombsAccumulated > MAX_BOMBS) {
@@ -104,7 +104,7 @@ public class Statistics {
         increaseBombsCollected();
     }
 
-    public void reduceBombs() {
+    public void reduceBombsAccumulated() {
         this.bombsAccumulated--;
 
         if (this.bombsAccumulated < 0) {

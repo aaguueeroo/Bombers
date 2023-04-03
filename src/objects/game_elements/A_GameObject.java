@@ -29,4 +29,12 @@ public abstract class A_GameObject {
         return distance < (size.x / 2 + other.size.x / 2);
     }
 
+    public boolean isInRadius(A_GameObject other, double actionRadius) {
+        double distanceX = this.coordinates.center_x - other.coordinates.center_x;
+        double distanceY = this.coordinates.center_y - other.coordinates.center_y;
+        double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+        return distance < (size.x / 2 + other.size.x / 2 + actionRadius);
+    }
+
 }

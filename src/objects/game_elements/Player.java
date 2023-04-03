@@ -27,6 +27,14 @@ public class Player extends A_GameObject implements Movable {
         coordinates = new Coordinates(A_Panel.WIDTH/2 - radius , A_Panel.HEIGHT / 2 - radius, size.x, size.y);
     }
 
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public Size getSize() {
+        return size;
+    }
+
     public void increaseSpeed(){
         speed += 10;
     }

@@ -23,7 +23,8 @@ public class Gameplay {
 
     Player player;
     Coin coin;
-    Bomb bomb;
+    Ammo ammo;
+    List<Bomb> placedBombs;
     List<Obstacle> obstacles;
     Teleporter teleporter;
     Statistics statistics;
@@ -44,7 +45,8 @@ public class Gameplay {
     public void init() {
         player = new Player();
         coin = new Coin();
-        bomb = new Bomb();
+        ammo = new Ammo();
+        placedBombs = new ArrayList<>();
         initObstacles();
         initTeleporter();
         statistics.reset();
@@ -114,9 +116,12 @@ public class Gameplay {
             panel.draw(obstacle);
         }
         panel.draw(coin);
-        panel.draw(bomb);
+        panel.draw(ammo);
         if (teleporter != null) {
             panel.draw(teleporter);
+        }
+        for (Bomb bomb : placedBombs) {
+            panel.draw(bomb);
         }
     }
 
@@ -129,9 +134,19 @@ public class Gameplay {
         checkCollisions();
         updateStats();
 
+
+
         // update the game state
         // check if the game is over
         // check if the game is won
+    }
+
+    private void updateStats() {
+
+        if (stateManager.gameState == GameStates.RUNNING) {
+            statistics.setCurrentTime(System.currentTimeMillis());
+            statistics.setObstaclesOnScreen(obstacles.size());
+        }
     }
 
     private void checkCollisions() {
@@ -141,7 +156,7 @@ public class Gameplay {
             if (player.isColliding(obstacles.get(i))) {
                 if (statistics.getBombsAccumulated() > 0) {
                     obstacles.remove(i);
-                    statistics.reduceBombs();
+                    statistics.reduceBombsAccumulated();
                     player.decreaseSpeed();
                 } else
                     gameOver();
@@ -156,14 +171,14 @@ public class Gameplay {
             addObstacles(2);
             initTeleporter();
             coin = new Coin();
-            bomb = new Bomb();
+            ammo = new Ammo();
             player.increaseSpeed();
         }
 
         //Get bomb
-        if (player.isColliding(bomb)) {
-            statistics.increaseBombs();
-            bomb = new Bomb();
+        if (player.isColliding(ammo)) {
+            statistics.increaseBombsAccumulated();
+            ammo = new Ammo();
             coin = new Coin();
             initTeleporter();
             player.increaseSpeed();
@@ -175,7 +190,7 @@ public class Gameplay {
                 statistics.increaseLevel();
                 initTeleporter();
                 coin = new Coin();
-                bomb = new Bomb();
+                ammo = new Ammo();
 
                 for (int i = 0; i < 5; i++) {
                     obstacles.add(new Obstacle());
@@ -196,7 +211,7 @@ public class Gameplay {
 
         for (int i = 0; i < n; i++) {
             obstacles.add(new Obstacle());
-            if(obstacles.get(i).isColliding(player)){
+            if (obstacles.get(i).isColliding(player)) {
                 obstacles.remove(i);
             }
         }
@@ -225,19 +240,11 @@ public class Gameplay {
 
     private void gameOver() {
         player.stopMovement();
-        if(teleporter != null)
+        if (teleporter != null)
             teleporter.stopMovement();
         stateManager.setState(GameStates.FINISHED);
 
         dialog = new EndDialog("Game Over", statistics.toString());
-    }
-
-    private void updateStats() {
-
-        if(stateManager.gameState == GameStates.RUNNING) {
-            statistics.setCurrentTime(System.currentTimeMillis());
-            statistics.setObstaclesOnScreen(obstacles.size());
-        }
     }
 
     private void handleUserInput() {
@@ -262,6 +269,13 @@ public class Gameplay {
                 init();
                 stateManager.gameState = GameStates.RUNNING;
             }
+
+            if (keyReleased == Keys.SHOOT && stateManager.gameState == GameStates.RUNNING) {
+                keyHandler.resetKeyReleased();
+                if (statistics.getBombsAccumulated() > 0) {
+                    placeBomb();
+                }
+            }
         }
 
         if (stateManager.gameState == GameStates.PAUSED) {
@@ -281,10 +295,30 @@ public class Gameplay {
             case RIGHT:
                 player.setDirectionMovement(Direction.RIGHT);
                 break;
-            case SHOOT:
-                break;
         }
     }
 
+    private void placeBomb() {
+        statistics.reduceBombsAccumulated();
+        double coordX = player.getCoordinates().topLeftCorner_x - player.getSize().x / 2 + Bomb.BOMB_RADIUS;
+        double coordY = player.getCoordinates().topLeftCorner_y - player.getSize().y / 2 + Bomb.BOMB_RADIUS;
+
+        Bomb newBomb = new Bomb(new Coordinates(coordX, coordY, Bomb.BOMB_RADIUS, Bomb.BOMB_RADIUS));
+        placedBombs.add(newBomb);
+
+        for (int i = 0; i < placedBombs.size(); i++) {
+            Bomb bomb = placedBombs.get(i);
+            for (int j = 0; j < obstacles.size(); j++) {
+                Obstacle obstacle = obstacles.get(j);
+                if (bomb.isInRadius(obstacle, 50)) {
+                    obstacles.remove(obstacle);
+                    placedBombs.remove(bomb);
+                    statistics.reduceBombsAccumulated();
+                    break;
+                }
+            }
+        }
+//        placedBombs.get(placedBombs.size() - 1).fire();
+    }
 
 }

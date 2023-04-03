@@ -1,30 +1,39 @@
 package objects.game_elements;
 
+import objects.Coordinates;
 import objects.Size;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 
 public class Bomb extends A_GameObject {
 
-    public Bomb() {
-        super();
-        size = new Size(20, 20);
-        init();
+    public static final int BOMB_RADIUS = 30;
+    private static final double TIME_TO_EXPLODE_MILIS = 1000;
+    boolean isExploding = false;
+    long timeExploded;
+
+    public Bomb(Coordinates coordinates) {
+        this.coordinates = coordinates;
+        this.size = new Size(BOMB_RADIUS, BOMB_RADIUS);
     }
 
     @Override
     public void draw(Graphics graphics) {
-        Graphics2D g2d = (Graphics2D) graphics;
-        g2d.setColor(Color.green);
+        //draws a black circle with radious 30
+        graphics.setColor(Color.BLACK);
+        graphics.fillOval((int) coordinates.topLeftCorner_x, (int) coordinates.topLeftCorner_y, (int) size.x, (int) size.y);
+    }
 
-        AffineTransform oldTransform = g2d.getTransform(); // save old transform
+    public void fire(double diffSeconds) {
+        //TODO: make the bomb explode
 
-        g2d.translate(coordinates.topLeftCorner_x + size.x / 2, coordinates.topLeftCorner_y + size.y / 2); // translate to center of square
-        g2d.rotate(Math.PI / 4); // rotate by angle
-        g2d.fillRect((int) (-size.x / 2), (int) (-size.y / 2), (int) size.x, (int) size.y); // draw square centered at (0, 0)
+        timeExploded = System.currentTimeMillis();
+        isExploding = true;
 
-        g2d.setTransform(oldTransform); // restore old transform
-
+        if (System.currentTimeMillis() > timeExploded + TIME_TO_EXPLODE_MILIS) {
+            isExploding = false;
+            size.x += diffSeconds * 30;
+            size.y += diffSeconds * 30;
+        }
     }
 }
