@@ -12,9 +12,9 @@ public class Dialog extends A_UIObject {
     protected String text;
     protected Button[] actions;
 
-    public Dialog(String title) {
+    public Dialog(String text) {
         super();
-        this.title = title;
+        this.text = text;
     }
 
     public Dialog(String title, String text, Size size) {
@@ -33,9 +33,11 @@ public class Dialog extends A_UIObject {
         super.draw(graphics);
         graphics.setColor(Color.WHITE);
         graphics.setFont(new Font("Courier New", Font.BOLD, 40));
-        graphics.drawString(title,
-                370,
-                200);
+        if(title!=null) {
+            graphics.drawString(title,
+                    370,
+                    200);
+        }
         drawStringMultiLine(graphics,
                 text,
                 370,

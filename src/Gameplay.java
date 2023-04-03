@@ -16,6 +16,7 @@ import java.util.List;
 public class Gameplay {
 
     private static final int INITIAL_OBSTACLES = 5;
+    private static final int VICTORY_SCORE = 150;
 
     final GamePanel panel;
     final KeyHandler keyHandler;
@@ -126,6 +127,10 @@ public class Gameplay {
         }
         checkCollisions();
         updateStats();
+
+        if(statistics.getScore()>VICTORY_SCORE){
+            victory();
+        }
 
 
         // update the game state
@@ -246,10 +251,14 @@ public class Gameplay {
         stateManager.setState(GameStates.RUNNING);
     }
 
-//    private void victory(){
-//        player.stopMovement();
-//        stateManager.setState(GameStates.FINISHED);
-//    }
+    private void victory(){
+        player.stopMovement();
+        stateManager.setState(GameStates.FINISHED);
+
+        dialog = new Dialog("You won bitch",
+                "I hate you but at least you played the game. Fuck off!",
+                new Size(550,450));
+    }
 
     private void gameOver() {
         statistics.pauseTimer();
