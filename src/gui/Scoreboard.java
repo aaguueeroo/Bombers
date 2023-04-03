@@ -21,6 +21,7 @@ public class Scoreboard extends A_UIObject {
         graphics.drawString("Score: " + stats.getScore(), 10, 50);
         graphics.drawString("Max Score: " + stats.getMaxScore(), 10, 100);
         graphics.drawString("Level: " + stats.getLevel(), 10, 150);
-        graphics.drawString("Bombs: " + stats.getBombsAccumulated(), A_Panel.WIDTH - 250, 50);
+        graphics.drawString("Time: " + stats.getTimeString(), A_Panel.WIDTH - 280, 50);
+        graphics.drawString("Bombs: " + stats.getBombsAccumulated(), A_Panel.WIDTH - 280, 100);
     }
 }

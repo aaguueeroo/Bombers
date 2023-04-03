@@ -8,6 +8,7 @@ import java.awt.*;
 public class Bomb extends A_GameObject {
 
     public static final int BOMB_RADIUS = 30;
+    public static final int ACTION_RADIUS = 500;
     private static final double TIME_TO_EXPLODE_MILIS = 1000;
     boolean isExploding = false;
     long timeExploded;

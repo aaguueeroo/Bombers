@@ -71,13 +71,6 @@ public class Gameplay {
         }
     }
 
-//    private void initObstacles(int n) {
-//        obstacles = new ArrayList<>();
-//        for (int i = 0; i < n; i++) {
-//            obstacles.add(new Obstacle());
-//        }
-//    }
-
     public void run() {
 
         long lastTick = System.currentTimeMillis();
@@ -135,7 +128,6 @@ public class Gameplay {
         updateStats();
 
 
-
         // update the game state
         // check if the game is over
         // check if the game is won
@@ -144,8 +136,8 @@ public class Gameplay {
     private void updateStats() {
 
         if (stateManager.gameState == GameStates.RUNNING) {
-            statistics.setCurrentTime(System.currentTimeMillis());
             statistics.setObstaclesOnScreen(obstacles.size());
+            statistics.updateTimer();
         }
     }
 
@@ -217,8 +209,28 @@ public class Gameplay {
         }
     }
 
+    private void placeBomb() {
+        statistics.reduceBombsAccumulated();
+        double coordX = player.getCoordinates().topLeftCorner_x - player.getSize().x / 2 + Bomb.BOMB_RADIUS;
+        double coordY = player.getCoordinates().topLeftCorner_y - player.getSize().y / 2 + Bomb.BOMB_RADIUS;
+
+        Bomb newBomb = new Bomb(new Coordinates(coordX, coordY, Bomb.BOMB_RADIUS, Bomb.BOMB_RADIUS));
+        placedBombs.add(newBomb);
+
+        for (int j = 0; j < obstacles.size(); j++) {
+            Obstacle obstacle = obstacles.get(j);
+            if (newBomb.isInRadius(obstacle, Bomb.ACTION_RADIUS)) {
+                obstacles.remove(obstacle);
+                break;
+            }
+        }
+
+        placedBombs.remove(newBomb);
+//        placedBombs.get(placedBombs.size() - 1).fire();
+    }
 
     private void pause() {
+        statistics.pauseTimer();
         //TODO: pause the game, not only the state but timer and so on
         player.stopMovement();
         if (teleporter != null)
@@ -227,6 +239,7 @@ public class Gameplay {
     }
 
     private void resume() {
+        statistics.restartTimer();
         player.continueMovement();
         if (teleporter != null)
             teleporter.continueMovement();
@@ -239,6 +252,7 @@ public class Gameplay {
 //    }
 
     private void gameOver() {
+        statistics.pauseTimer();
         player.stopMovement();
         if (teleporter != null)
             teleporter.stopMovement();
@@ -283,42 +297,10 @@ public class Gameplay {
         }
 
         switch (keyPressed) {
-            case UP:
-                player.setDirectionMovement(Direction.UP);
-                break;
-            case DOWN:
-                player.setDirectionMovement(Direction.DOWN);
-                break;
-            case LEFT:
-                player.setDirectionMovement(Direction.LEFT);
-                break;
-            case RIGHT:
-                player.setDirectionMovement(Direction.RIGHT);
-                break;
+            case UP -> player.setDirectionMovement(Direction.UP);
+            case DOWN -> player.setDirectionMovement(Direction.DOWN);
+            case LEFT -> player.setDirectionMovement(Direction.LEFT);
+            case RIGHT -> player.setDirectionMovement(Direction.RIGHT);
         }
     }
-
-    private void placeBomb() {
-        statistics.reduceBombsAccumulated();
-        double coordX = player.getCoordinates().topLeftCorner_x - player.getSize().x / 2 + Bomb.BOMB_RADIUS;
-        double coordY = player.getCoordinates().topLeftCorner_y - player.getSize().y / 2 + Bomb.BOMB_RADIUS;
-
-        Bomb newBomb = new Bomb(new Coordinates(coordX, coordY, Bomb.BOMB_RADIUS, Bomb.BOMB_RADIUS));
-        placedBombs.add(newBomb);
-
-        for (int i = 0; i < placedBombs.size(); i++) {
-            Bomb bomb = placedBombs.get(i);
-            for (int j = 0; j < obstacles.size(); j++) {
-                Obstacle obstacle = obstacles.get(j);
-                if (bomb.isInRadius(obstacle, 50)) {
-                    obstacles.remove(obstacle);
-                    placedBombs.remove(bomb);
-                    statistics.reduceBombsAccumulated();
-                    break;
-                }
-            }
-        }
-//        placedBombs.get(placedBombs.size() - 1).fire();
-    }
-
 }

@@ -1,20 +1,18 @@
 package objects;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Statistics {
-
     private static final int MAX_BOMBS = 5;
 
     private int level;
     private int score;
     private int maxScore;
     private int bombsAccumulated;
-
-    private long startTime;
-    private long timeElapsed;
+    private SimpleTimer timer;
 
     private int obstaclesOnScreen;
     private int maxObstaclesOnScreen;
@@ -30,23 +28,16 @@ public class Statistics {
     private int maxTeleports;
 
     public Statistics() {
-        this.level = 1;
-        this.score = 0;
+        timer = new SimpleTimer();
+        restartTimer();
+        reset();
         this.maxScore = 0;
-        this.bombsAccumulated = 0;
-        this.startTime = System.currentTimeMillis();
 
-        this.obstaclesOnScreen = 0;
         this.maxObstaclesOnScreen = 0;
-        this.obstaclesDestroyed = 0;
         this.maxObstaclesDestroyed = 0;
-        this.coinsCollected = 0;
         this.maxCoinsCollected = 0;
-        this.bombsCollected = 0;
         this.maxBombsCollected = 0;
-        this.bombsExploded = 0;
         this.maxBombsExploded = 0;
-        this.teleports = 0;
         this.maxTeleports = 0;
     }
 
@@ -54,13 +45,13 @@ public class Statistics {
         this.level = 1;
         this.score = 0;
         this.bombsAccumulated = 0;
-        this.startTime = System.currentTimeMillis();
         this.obstaclesOnScreen = 0;
         this.obstaclesDestroyed = 0;
         this.coinsCollected = 0;
         this.bombsCollected = 0;
         this.bombsExploded = 0;
         this.teleports = 0;
+        timer.restart();
     }
 
     //Level
@@ -115,15 +106,22 @@ public class Statistics {
         increaseObstaclesDestroyed();
     }
 
-    //Time elapsed
+    //Times
 
-    public void setCurrentTime(long currentTime) {
-        this.timeElapsed = currentTime - startTime;
+    public void updateTimer() {
+        timer.update();
     }
 
-    public long getTimeElapsed(long currentTime) {
-        timeElapsed = currentTime - startTime;
-        return timeElapsed;
+    public void restartTimer() {
+        timer.restart();
+    }
+
+    public void pauseTimer() {
+        timer.pause();
+    }
+
+    public String getTimeString() {
+        return timer.toString();
     }
 
     //Obstacles
@@ -226,7 +224,7 @@ public class Statistics {
 
         str = "Level: " + this.level;
         str += "\nScore: " + this.score;
-        str += "\nTime: " + LocalTime.MIDNIGHT.plus(Duration.ofMillis(timeElapsed)).format(DateTimeFormatter.ofPattern("mm:ss"));
+        str += "\nTime: " + timer.toString();
         str += "\nMax Score: " + this.maxScore;
         str += "\nBombs accumulated: " + this.bombsAccumulated;
 
